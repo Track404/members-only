@@ -2,10 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sign Up</title>
   </head>
   <body>
-    <h1>hello world</h1>
+    <h1>Sign Up</h1>
+    <%- include("partials/errors.ejs") %>
+
+    <form action="" method="POST">
+      <label for="firstName">FirstName</label>
+      <input
+        id="firstName"
+        name="firstName"
+        placeholder="firstname"
+        type="text"
+      />
+      <label for="lastName">LastName</label>
+      <input id="lastName" name="lastName" placeholder="lastName" type="text" />
+      <label for="email">Email</label>
+      <input id="email" name="email" placeholder="email" type="email" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" />
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" name="confirmPassword" type="password" />
+      <button>Sign Up</button>
+    </form>
   </body>
 </html>
