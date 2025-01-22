@@ -1,9 +1,9 @@
 const pool = require('./pool');
 
-async function insertUser(firstName, lastName, email, password) {
+async function insertUser(firstName, lastName, email, password, admin = false) {
   await pool.query(
-    'INSERT INTO users (firstName, lastName, email, password ,member) VALUES ($1, $2, $3, $4 ,FALSE)',
-    [firstName, lastName, email, password]
+    'INSERT INTO users (firstName, lastName, email, password ,member,admin) VALUES ($1, $2, $3, $4 ,FALSE,$5)',
+    [firstName, lastName, email, password, admin]
   );
 }
 
@@ -39,20 +39,19 @@ async function sendMessage(title, message, date, user_id) {
 }
 
 async function getAllMessage() {
-  const { rows } = await pool.query('SELECT * FROM messages');
-  return rows;
-}
-
-async function getAllMessage() {
   try {
     const { rows } = await pool.query(
-      'SELECT  d.title, d.date, d.message, m.email AS username FROM users m JOIN messages d ON m.id = d.user_id'
+      'SELECT  d.id ,d.title, d.date, d.message, m.email AS username FROM users m JOIN messages d ON m.id = d.user_id'
     );
     return rows;
   } catch (err) {
     console.error('Error fetching message', err);
     throw err;
   }
+}
+
+async function deleteMessageDb(id) {
+  await pool.query('DELETE FROM messages WHERE id= $1', [id]);
 }
 module.exports = {
   insertUser,
@@ -62,4 +61,5 @@ module.exports = {
   findUserInfoById,
   sendMessage,
   getAllMessage,
+  deleteMessageDb,
 };

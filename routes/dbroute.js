@@ -35,4 +35,6 @@ dbRouter.get('/message', dbController.getMessage);
 
 dbRouter.get('/newMessage', dbController.getNewMessage);
 dbRouter.post('/newMessage', dbController.postNewMessage);
+
+dbRouter.post('/:id/delete', dbController.deleteMessage);
 module.exports = dbRouter;

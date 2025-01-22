@@ -72,15 +72,18 @@ async function getSignUp(req, res) {
 }
 
 async function postSignUp(req, res) {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, admin } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).render('signUp', {
       errors: errors.array(),
     });
   }
-  await db.insertUser(firstName, lastName, email, hashedPassword);
+  console.log(admin);
+  await db.insertUser(firstName, lastName, email, hashedPassword, admin);
+  res.redirect('/login');
 }
 
 async function getMemberPage(req, res) {
@@ -123,14 +126,20 @@ async function postLogIn(req, res) {
 
 async function getMessage(req, res) {
   const messagesMember = await db.getAllMessage();
+  console.log(messagesMember);
 
   if (req.isAuthenticated()) {
-    if (req.user.member) {
-      res.render('message', { user: req.user, messages: messagesMember });
-    } else {
-      res.render('messageNonMember', {
+    if (req.user.admin) {
+      return res.render('message', { user: req.user, admin: messagesMember });
+    } else if (req.user.member) {
+      res.render('message', {
         user: req.user,
-        messages: messagesMember,
+        member: messagesMember,
+      });
+    } else {
+      return res.render('message', {
+        user: req.user,
+        notMember: messagesMember,
       });
     }
   } else {
@@ -148,6 +157,12 @@ async function postNewMessage(req, res) {
   await db.sendMessage(title, message, date, req.user.id);
   res.redirect('/message');
 }
+
+async function deleteMessage(req, res) {
+  console.log(req.params.id);
+  await db.deleteMessageDb(req.params.id);
+  res.redirect('/message');
+}
 module.exports = {
   validateUser,
   validateMember,
@@ -160,4 +175,5 @@ module.exports = {
   getMessage,
   getNewMessage,
   postNewMessage,
+  deleteMessage,
 };
