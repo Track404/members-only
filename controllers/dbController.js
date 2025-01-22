@@ -107,6 +107,10 @@ async function postMemberPage(req, res) {
     });
   }
 }
+
+async function getlogIn(req, res) {
+  res.render('logIn');
+}
 module.exports = {
   validateUser,
   validateMember,
@@ -114,4 +118,5 @@ module.exports = {
   postSignUp,
   getMemberPage,
   postMemberPage,
+  getlogIn,
 };

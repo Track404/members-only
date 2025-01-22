@@ -19,8 +19,21 @@ async function updateMember(email) {
   await pool.query('UPDATE users SET member=TRUE WHERE email = $1', [email]);
 }
 
+async function findUserInfoByEmail(username) {
+  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [
+    username,
+  ]);
+  return rows[0];
+}
+
+async function findUserInfoById(id) {
+  const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  return rows[0];
+}
 module.exports = {
   insertUser,
   findEmail,
   updateMember,
+  findUserInfoByEmail,
+  findUserInfoById,
 };
