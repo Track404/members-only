@@ -15,20 +15,27 @@ dbRouter.post(
 dbRouter.get('/login', dbController.getlogIn);
 dbRouter.post(
   '/login',
+  dbController.validateMember,
   passport.authenticate('local', {
     successRedirect: '/message',
-    failureRedirect: '/',
+    failureRedirect: '/login',
   })
 );
 
+dbRouter.get('/log-out', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+});
+
 dbRouter.get('/message', (req, res) => {
   if (req.isAuthenticated()) {
-    // User is authenticated, so pass the user data to the view
-    console.log(req.user); // Logs the authenticated user object
-    res.render('message', { user: req.user }); // Renders the message view with user data
+    res.render('message', { user: req.user });
   } else {
-    // User is not authenticated, redirect to login page or show an error
-    res.redirect('/login');
+    res.render('cannotAcess');
   }
 });
 module.exports = dbRouter;

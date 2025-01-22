@@ -111,6 +111,15 @@ async function postMemberPage(req, res) {
 async function getlogIn(req, res) {
   res.render('logIn');
 }
+
+async function postLogIn(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render('login', {
+      errors: errors.array(),
+    });
+  }
+}
 module.exports = {
   validateUser,
   validateMember,
@@ -119,4 +128,5 @@ module.exports = {
   getMemberPage,
   postMemberPage,
   getlogIn,
+  postLogIn,
 };
