@@ -38,4 +38,6 @@ dbRouter.get('/message', (req, res) => {
     res.render('cannotAcess');
   }
 });
+
+dbRouter.get('/newMessage', dbController.getNewMessage);
 module.exports = dbRouter;

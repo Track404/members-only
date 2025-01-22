@@ -120,6 +120,10 @@ async function postLogIn(req, res) {
     });
   }
 }
+
+async function getNewMessage(req, res) {
+  res.render('newMessage');
+}
 module.exports = {
   validateUser,
   validateMember,
@@ -129,4 +133,5 @@ module.exports = {
   postMemberPage,
   getlogIn,
   postLogIn,
+  getNewMessage,
 };
