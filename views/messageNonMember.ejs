@@ -12,10 +12,7 @@
     <%}%>
     <ol>
       <% if (locals.messages) {%> <% messages.forEach(function(message) { %>
-      <li>
-        Title: <%= message.title %>, Message: <%= message.message %> ,Date:<%=
-        message.date.toDateString() %> User :<%= message.username %>
-      </li>
+      <li>Title: <%= message.title %>, Message: <%= message.message %></li>
 
       <% }); %> <% } %>
     </ol>

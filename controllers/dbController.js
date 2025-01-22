@@ -121,8 +121,32 @@ async function postLogIn(req, res) {
   }
 }
 
+async function getMessage(req, res) {
+  const messagesMember = await db.getAllMessage();
+
+  if (req.isAuthenticated()) {
+    if (req.user.member) {
+      res.render('message', { user: req.user, messages: messagesMember });
+    } else {
+      res.render('messageNonMember', {
+        user: req.user,
+        messages: messagesMember,
+      });
+    }
+  } else {
+    res.render('cannotAcess');
+  }
+}
+
 async function getNewMessage(req, res) {
   res.render('newMessage');
+}
+
+async function postNewMessage(req, res) {
+  const { title, message } = req.body;
+  const date = new Date();
+  await db.sendMessage(title, message, date, req.user.id);
+  res.redirect('/message');
 }
 module.exports = {
   validateUser,
@@ -133,5 +157,7 @@ module.exports = {
   postMemberPage,
   getlogIn,
   postLogIn,
+  getMessage,
   getNewMessage,
+  postNewMessage,
 };

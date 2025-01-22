@@ -31,13 +31,8 @@ dbRouter.get('/log-out', (req, res, next) => {
   });
 });
 
-dbRouter.get('/message', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render('message', { user: req.user });
-  } else {
-    res.render('cannotAcess');
-  }
-});
+dbRouter.get('/message', dbController.getMessage);
 
 dbRouter.get('/newMessage', dbController.getNewMessage);
+dbRouter.post('/newMessage', dbController.postNewMessage);
 module.exports = dbRouter;
