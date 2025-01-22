@@ -15,7 +15,12 @@ async function findEmail(email) {
   return rows.length === 0 ? false : rows[0].email;
 }
 
+async function updateMember(email) {
+  await pool.query('UPDATE users SET member=TRUE WHERE email = $1', [email]);
+}
+
 module.exports = {
   insertUser,
   findEmail,
+  updateMember,
 };

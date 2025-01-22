@@ -30,7 +30,7 @@ const validateUser = [
       const existingUser = await db.findEmail(value);
       console.log('Existing User:', existingUser); // Log the result from the query
       if (existingUser) {
-        console.log('User already exists!');
+        console.log('User exists!');
         throw new Error('A user already exists with this e-mail address');
       }
       return true;
@@ -48,6 +48,25 @@ const validateUser = [
   }),
 ];
 
+const validateMember = [
+  body('username')
+    .trim()
+    .notEmpty()
+    .withMessage(`Email ${emptyERR}`)
+    .isEmail()
+    .withMessage(`Email ${emailERR}`)
+    .custom(async (value) => {
+      console.log('Checking email:', value); // Log the email being checked
+      const existingUser = await db.findEmail(value);
+      console.log('Existing User:', existingUser); // Log the result from the query
+      if (!existingUser) {
+        console.log('User does not exist!');
+        throw new Error('this e-mail address does not exists Sign Up Now');
+      }
+      return true;
+    }),
+];
+
 async function getSignUp(req, res) {
   res.render('signUp');
 }
@@ -63,8 +82,36 @@ async function postSignUp(req, res) {
   }
   await db.insertUser(firstName, lastName, email, hashedPassword);
 }
+
+async function getMemberPage(req, res) {
+  res.render('signUpMember', { message: '' });
+}
+
+async function postMemberPage(req, res) {
+  const { username, passCode } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render('signUpMember', {
+      errors: errors.array(),
+      message: '',
+    });
+  }
+  if (passCode == 'ODIN') {
+    await db.updateMember(username);
+    return res.render('signUpMember', {
+      message: 'You succesfully join the club !!!',
+    });
+  } else {
+    return res.render('signUpMember', {
+      message: 'Wrong passCode try again !',
+    });
+  }
+}
 module.exports = {
   validateUser,
+  validateMember,
   getSignUp,
   postSignUp,
+  getMemberPage,
+  postMemberPage,
 };

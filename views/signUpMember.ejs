@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>The Club</title>
+  </head>
+  <body>
+    <h1>Join the club !</h1>
+    <p>Enter the secret passCode to join the club</p>
+    <%- include("partials/errors.ejs") %>
+    <form action="/member" method="POST">
+      <label for="username">Username (email)</label>
+      <input
+        id="username"
+        name="username"
+        placeholder="username"
+        type="email"
+      />
+      <label for="passCode">passCode</label>
+      <input id="passCode" name="passCode" placeholder="code" type="text" />
+
+      <button>Join the club</button>
+      <h2><%= message %></h2>
+    </form>
+  </body>
+</html>
